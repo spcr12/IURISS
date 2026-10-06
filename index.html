@@ -6,7 +6,7 @@
   <title>CEJ - Expediente Judicial Electrónico | Gobierno Digital e Informático</title>
   
   <style>
-    /* PALETA CROMÁTICA INSTITUCIONAL MAGENTA / VINO IMPERIAL */
+    /* PALETA CROMÁTICA MAGENTA INSTITUCIONAL */
     :root {
       --mag-darkest: #240315;
       --mag-dark: #4a0418;
@@ -36,14 +36,14 @@
       justify-content: space-between;
     }
 
-    /* CONTROL DE FLUJO DE PANTALLAS */
+    /* CONTROL DE LAS 6 PANTALLAS (0 A 5) */
     .screen-view {
-      display: none;
+      display: none !important;
       width: 100%;
       flex-grow: 1;
     }
     .screen-view.active {
-      display: flex;
+      display: flex !important;
       flex-direction: column;
     }
 
@@ -109,7 +109,7 @@
       transform: translateY(-1px);
     }
 
-    /* PANTALLA 2: BARRA ESTATAL */
+    /* BARRA ESTATAL PANTALLA 2 */
     .gov-top-bar {
       background-color: var(--mag-dark);
       color: #ffffff;
@@ -170,7 +170,7 @@
     }
     @keyframes pulseAlert {
       0%, 100% { opacity: 1; }
-      50% { opacity: 0.4; }
+      50% { opacity: 0.5; }
     }
 
     /* CONTENEDOR GENERAL */
@@ -264,6 +264,14 @@
     @media (max-width: 768px) {
       .view-desktop { display: none; }
       .view-mobile { display: block; }
+      .split-responsive { grid-template-columns: 1fr !important; }
+    }
+
+    .split-responsive {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
     }
 
     /* MODAL */
@@ -289,7 +297,7 @@
       box-shadow: 0 20px 40px rgba(0,0,0,0.35);
     }
 
-    /* BARRAS DE PROGRESO */
+    /* BARRAS DE PROGRESO DE CARGA */
     .progress-bar-wrap {
       background: #fce7f3;
       height: 8px;
@@ -360,15 +368,15 @@
             </div>
           </div>
 
-          <!-- MENSAJE DE ADVERTENCIA ACADÉMICA EXIGIDO -->
+          <!-- MENSAJE DE ADVERTENCIA ACADÉMICA -->
           <div style="background: #fff1f2; border-left: 4px solid #be185d; padding: 10px 12px; border-radius: 6px; margin-bottom: 18px;">
             <p style="font-size: 11px; color: #4a0418; line-height: 1.4; font-weight: 600;">
               AVISO: El presente trabajo es un producto netamente académico y NO es un sitio oficial del Poder Judicial del Perú. Su diseño responde exclusivamente a fines didácticos universitarios.
             </p>
           </div>
 
-          <!-- BOTÓN PARA PASAR A PANTALLA 1 -->
-          <button onclick="goToScreen1()" class="btn-main">
+          <!-- BOTÓN PASAR A PANTALLA 1 -->
+          <button onclick="goToScreen(1)" class="btn-main">
             <span>Ingresar a la Plataforma</span>
             <svg style="width: 16px; height: 16px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
           </button>
@@ -396,7 +404,7 @@
     <!-- PANTALLA 2: PRINCIPAL CON BARRA HORIZONTAL -->
     <!-- ========================================== -->
     <div id="screen-2" class="screen-view">
-      <!-- Barra Horizontal Superior de Estado -->
+      <!-- Barra Superior -->
       <div class="gov-top-bar">
         <div style="display: flex; align-items: center; gap: 8px;">
           <svg style="width: 22px; height: 22px; color: #fbcfe8;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18"/><path d="M3 10h18"/><path d="M5 10v11"/><path d="M19 10v11"/><path d="M9 10v11"/><path d="M15 10v11"/><path d="M12 2 2 7h20L12 2z"/></svg>
@@ -415,21 +423,21 @@
         </div>
       </div>
 
-      <!-- Barra Horizontal de Menú -->
+      <!-- Barra Horizontal Estatal -->
       <div class="gov-nav-horizontal">
         <button onclick="showInfoMenu('inicio')" class="nav-item-btn active">Inicio</button>
         <button onclick="showInfoMenu('mision')" class="nav-item-btn">Misión</button>
         <button onclick="showInfoMenu('vision')" class="nav-item-btn">Visión</button>
         <button onclick="showInfoMenu('transparencia')" class="nav-item-btn">Transparencia</button>
         <button onclick="showInfoMenu('contactanos')" class="nav-item-btn">Contáctanos</button>
-        <button onclick="openCaptchaSearch()" class="nav-item-btn nav-item-search">🔍 Búsqueda de Expediente</button>
+        <button onclick="openCaptchaModal()" class="nav-item-btn nav-item-search">🔍 Búsqueda de Expediente</button>
       </div>
 
-      <!-- Área de Contenido Central -->
+      <!-- Área Central de Pantalla 2 -->
       <div class="layout-wrapper" style="flex-grow: 1; display: flex; flex-direction: column; justify-content: center;">
         
-        <!-- PARTE VACÍA: ILUSTRACIÓN DE TEMIS (AL HACER CLIC LLEVA AL CAPTCHA) -->
-        <div id="temis-blank-area" onclick="openCaptchaSearch()" class="panel-card" style="text-align: center; padding: 40px 16px; cursor: pointer; transition: transform 0.2s ease;">
+        <!-- PARTE VACÍA CON TEMIS: AL HACER CLIC LLEVA AL CAPTCHA -->
+        <div id="temis-blank-area" onclick="openCaptchaModal()" class="panel-card" style="text-align: center; padding: 40px 16px; cursor: pointer;">
           <svg style="width: 140px; height: 140px; margin: 0 auto 14px; display: block;" viewBox="0 0 200 200" fill="none">
             <circle cx="100" cy="100" r="90" fill="#fdf2f8" stroke="#be185d" stroke-width="3" stroke-dasharray="4 2"/>
             <path d="M100 25 L100 160" stroke="#831034" stroke-width="4" stroke-linecap="round"/>
@@ -444,89 +452,80 @@
           </svg>
           <h2 style="font-size: 19px; color: #4a0418; font-weight: 800;">Consulta de Expedientes Judiciales (CEJ)</h2>
           <p style="font-size: 13px; color: #64748b; max-width: 480px; margin: 8px auto 14px;">
-            Haga clic en esta área o en el botón superior para ingresar el <strong>código CAPTCHA</strong> y buscar expedientes por <strong>Número</strong> o por <strong>Partes</strong>.
+            Haga clic en cualquier parte de este recuadro o en el botón superior para ingresar el <strong>CAPTCHA de seguridad</strong>.
           </p>
-          <span style="font-size: 11px; background: #be185d; color: white; padding: 4px 12px; border-radius: 20px; font-weight: bold;">
-            Clic aquí para desbloquear búsqueda
+          <span style="font-size: 11px; background: #be185d; color: white; padding: 6px 14px; border-radius: 20px; font-weight: bold; display: inline-block;">
+            Clic aquí para abrir CAPTCHA
           </span>
         </div>
 
-        <!-- VISTA DE INFORMACIÓN INSTITUCIONAL -->
+        <!-- Info Institucional -->
         <div id="info-display-panel" class="panel-card" style="display: none;">
           <h3 id="info-header" style="color: var(--mag-primary); margin-bottom: 8px; font-size: 16px;"></h3>
           <p id="info-paragraph" style="font-size: 13px; color: #475569; line-height: 1.6;"></p>
           <button onclick="closeInfoMenu()" style="margin-top: 14px; background: #e2e8f0; border: none; padding: 7px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;">Cerrar</button>
         </div>
 
-        <!-- FORMULARIO DE BÚSQUEDA CON CAPTCHA -->
-        <div id="search-modal-box" class="panel-card" style="display: none; max-width: 650px; margin: 0 auto; width: 100%;">
-          <div style="background: #4a0418; color: white; padding: 12px 16px; border-radius: 12px 12px 0 0; margin: -18px -18px 16px; display: flex; justify-content: space-between; align-items: center;">
-            <strong style="font-size: 13px;">Búsqueda Jurisdiccional EJE</strong>
-            <button onclick="closeCaptchaSearch()" style="background: none; border: none; color: #fbcfe8; cursor: pointer; font-size: 16px;">✕</button>
-          </div>
+      </div>
+    </div>
 
-          <!-- PASO 1: CAPTCHA -->
-          <div id="captcha-step-box">
-            <div style="background: #fdf2f8; border: 1px solid #fbcfe8; padding: 10px; border-radius: 8px; font-size: 12px; color: #831034; margin-bottom: 14px;">
-              Validación obligatoria de seguridad informática antes de consultar el sistema:
-            </div>
-            <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 14px;">
-              <div id="captcha-render" style="background: #240315; color: #fbcfe8; font-family: monospace; font-size: 22px; font-weight: 800; letter-spacing: 5px; padding: 8px 16px; border-radius: 8px; text-decoration: line-through;">
-                8M4X1
-              </div>
-              <button onclick="refreshCaptcha()" style="padding: 9px 12px; border: 1px solid #cbd5e1; border-radius: 8px; cursor: pointer; background: white;" title="Nuevo código">↻</button>
-              <input type="text" id="captcha-input-txt" placeholder="Código" style="flex-grow: 1; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; text-transform: uppercase; font-weight: bold; font-size: 14px;">
-            </div>
-            <button onclick="validateCaptchaCode()" class="btn-main">Validar CAPTCHA</button>
-            <div id="captcha-fail-msg" style="display: none; color: #e11d48; font-size: 12px; margin-top: 8px; text-align: center; font-weight: 600;">Código de seguridad erróneo. Intente otra vez.</div>
-          </div>
+    <!-- ========================================== -->
+    <!-- PANTALLA 3: FORMULARIO DE BÚSQUEDA         -->
+    <!-- ========================================== -->
+    <div id="screen-3" class="screen-view center-content">
+      <div class="panel-card" style="max-width: 650px; width: 100%; margin: auto;">
+        <div style="background: #4a0418; color: white; padding: 14px 18px; border-radius: 12px 12px 0 0; margin: -18px -18px 16px; display: flex; justify-content: space-between; align-items: center;">
+          <strong style="font-size: 14px;">Búsqueda Jurisdiccional de Causas</strong>
+          <span style="font-size: 11px; color: #fbcfe8; background: rgba(255,255,255,0.15); padding: 2px 8px; border-radius: 4px;">Paso 3 de 5</span>
+        </div>
 
-          <!-- PASO 2: BÚSQUEDA POR NÚMERO Y POR PARTES -->
-          <div id="search-inputs-box" style="display: none;">
-            <div style="display: flex; gap: 8px; margin-bottom: 12px; border-bottom: 1px solid #fce7f3; padding-bottom: 8px;">
-              <button id="tab-code-btn" onclick="toggleSearchMode('code')" style="background: #831034; color: white; border: none; padding: 7px 14px; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer;">Por Número de Expediente</button>
-              <button id="tab-party-btn" onclick="toggleSearchMode('party')" style="background: #e2e8f0; color: #334155; border: none; padding: 7px 14px; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer;">Por Partes Procesales</button>
-            </div>
+        <p style="font-size: 12px; color: #64748b; margin-bottom: 14px;">
+          Filtro habilitado tras validación del CAPTCHA. Seleccione la modalidad de consulta:
+        </p>
 
-            <!-- Búsqueda por Código -->
-            <div id="tab-code-content">
-              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 8px; margin-bottom: 12px;">
-                <div>
-                  <label style="font-size: 11px; font-weight: bold; color: #64748b;">Correlativo</label>
-                  <input type="text" value="00174" style="width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; text-align: center; font-weight: bold;">
-                </div>
-                <div>
-                  <label style="font-size: 11px; font-weight: bold; color: #64748b;">Año</label>
-                  <input type="text" value="2019" style="width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; text-align: center; font-weight: bold;">
-                </div>
-                <div>
-                  <label style="font-size: 11px; font-weight: bold; color: #64748b;">Cuaderno</label>
-                  <input type="text" value="0" style="width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; text-align: center; font-weight: bold;">
-                </div>
-                <div>
-                  <label style="font-size: 11px; font-weight: bold; color: #64748b;">Distrito</label>
-                  <input type="text" value="2111" style="width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; text-align: center; font-weight: bold;">
-                </div>
-              </div>
-            </div>
+        <!-- Pestañas Número / Partes -->
+        <div style="display: flex; gap: 8px; margin-bottom: 14px; border-bottom: 1px solid #fce7f3; padding-bottom: 8px;">
+          <button id="tab-code-btn" onclick="toggleSearchMode('code')" style="background: #831034; color: white; border: none; padding: 8px 14px; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer;">Por Número de Expediente</button>
+          <button id="tab-party-btn" onclick="toggleSearchMode('party')" style="background: #e2e8f0; color: #334155; border: none; padding: 8px 14px; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer;">Por Partes Procesales</button>
+        </div>
 
-            <!-- Búsqueda por Partes -->
-            <div id="tab-party-content" style="display: none; margin-bottom: 12px;">
-              <label style="font-size: 11px; font-weight: bold; color: #64748b;">Demandante o Demandado:</label>
-              <input type="text" value="Andrés Leonidas Supo Quispe" style="width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; margin-top: 4px; font-weight: bold;">
+        <!-- Búsqueda por Número -->
+        <div id="tab-code-content">
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 8px; margin-bottom: 12px;">
+            <div>
+              <label style="font-size: 11px; font-weight: bold; color: #64748b;">Correlativo</label>
+              <input type="text" value="00174" style="width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; text-align: center; font-weight: bold;">
             </div>
-
-            <div style="background: #fdf2f8; border: 1px solid #fbcfe8; padding: 10px; border-radius: 8px; font-size: 12px; margin-bottom: 14px;">
-              Expediente localizado: <strong style="color: #831034;">00174-2019-0-2111-JR-LA-02</strong> (EsSalud vs Supo)
+            <div>
+              <label style="font-size: 11px; font-weight: bold; color: #64748b;">Año</label>
+              <input type="text" value="2019" style="width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; text-align: center; font-weight: bold;">
             </div>
-
-            <!-- BOTÓN QUE PASA A LA PANTALLA 4 -->
-            <button onclick="goToScreen4()" class="btn-main">
-              Buscar y Consultar Expediente
-            </button>
+            <div>
+              <label style="font-size: 11px; font-weight: bold; color: #64748b;">Cuaderno</label>
+              <input type="text" value="0" style="width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; text-align: center; font-weight: bold;">
+            </div>
+            <div>
+              <label style="font-size: 11px; font-weight: bold; color: #64748b;">Distrito</label>
+              <input type="text" value="2111" style="width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; text-align: center; font-weight: bold;">
+            </div>
           </div>
         </div>
 
+        <!-- Búsqueda por Partes -->
+        <div id="tab-party-content" style="display: none; margin-bottom: 12px;">
+          <label style="font-size: 11px; font-weight: bold; color: #64748b;">Demandante o Demandado:</label>
+          <input type="text" value="Andrés Leonidas Supo Quispe" style="width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; margin-top: 4px; font-weight: bold;">
+        </div>
+
+        <div style="background: #fdf2f8; border: 1px solid #fbcfe8; padding: 10px; border-radius: 8px; font-size: 12px; margin-bottom: 16px;">
+          Expediente asignado: <strong style="color: #831034;">00174-2019-0-2111-JR-LA-02</strong> (EsSalud vs Supo)
+        </div>
+
+        <!-- BOTÓN QUE PASA A PANTALLA 4 -->
+        <button onclick="goToScreen(4)" class="btn-main">
+          <span>Consultar Expediente Judicial</span>
+          <svg style="width: 16px; height: 16px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </button>
       </div>
     </div>
 
@@ -557,8 +556,8 @@
             <div style="font-size: 10px; color: #fbcfe8; font-weight: 700;">MÓDULO DEL EXPEDIENTE JUDICIAL ELECTRÓNICO (EJE)</div>
             <div style="font-size: 16px; font-weight: 800; font-family: monospace;">EXP. 00174-2019-0-2111-JR-LA-02</div>
           </div>
-          <button onclick="returnToPortal()" style="background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;">
-            ← Realizar Nueva Búsqueda
+          <button onclick="goToScreen(2)" style="background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;">
+            ← Volver a la Búsqueda
           </button>
         </div>
       </div>
@@ -579,7 +578,7 @@
         </div>
 
         <!-- 2. Partes Procesales y Petitorio -->
-        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 16px; margin-bottom: 16px;">
+        <div class="split-responsive">
           <div class="panel-card" style="margin-bottom: 0;">
             <div class="panel-title">2. Sujetos Procesales</div>
             <div style="display: flex; flex-direction: column; gap: 8px; font-size: 12px;">
@@ -600,7 +599,7 @@
           </div>
 
           <div class="panel-card" style="margin-bottom: 0;">
-            <div class="panel-title">3. Pretensión Principal</div>
+            <div class="panel-title">3. Petitorio Principal</div>
             <div style="font-size: 12px; line-height: 1.5; color: #334155;">
               <p><strong>Declaración judicial de desnaturalización</strong> de intermediación laboral mantenida fraudulentamente a través de SILSA.</p>
               <p style="margin-top: 6px;"><strong>Inclusión en planillas</strong> a plazo indeterminado (D. Leg. 728) desde el 01/12/1996 en el cargo de Almacenero.</p>
@@ -611,12 +610,10 @@
           </div>
         </div>
 
-        <!-- 3. LÍNEA DE TIEMPO INTERACTIVA EXIGIDA -->
+        <!-- 3. LÍNEA DE TIEMPO INTERACTIVA -->
         <div class="panel-card">
           <div class="panel-title">4. Línea de Tiempo del Expediente Electrónico</div>
-          <div class="timeline-container" id="timeline-flow-list">
-            <!-- Poblar dinámicamente con JavaScript -->
-          </div>
+          <div class="timeline-container" id="timeline-flow-list"></div>
         </div>
 
         <!-- 4. Actuados Procesales (12 Actuados) -->
@@ -653,6 +650,31 @@
 
   </div>
 
+  <!-- MODAL DE CAPTCHA FLOTANTE (PANTALLA 2) -->
+  <div id="captcha-modal-overlay" class="modal-overlay">
+    <div class="modal-card" style="max-width: 480px; padding: 24px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+        <h3 style="color: #4a0418; font-size: 16px; font-weight: bold;">Validación de Seguridad CAPTCHA</h3>
+        <button onclick="closeCaptchaModal()" style="background: none; border: none; font-size: 18px; cursor: pointer;">✕</button>
+      </div>
+
+      <div style="background: #fdf2f8; border: 1px solid #fbcfe8; padding: 10px; border-radius: 8px; font-size: 12px; color: #831034; margin-bottom: 14px;">
+        Ingrese el código alfanumérico para desbloquear el formulario de consulta (Pantalla 3).
+      </div>
+
+      <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 14px;">
+        <div id="captcha-render" style="background: #240315; color: #fbcfe8; font-family: monospace; font-size: 22px; font-weight: 800; letter-spacing: 5px; padding: 8px 16px; border-radius: 8px; text-decoration: line-through;">
+          8M4X1
+        </div>
+        <button onclick="refreshCaptcha()" style="padding: 9px 12px; border: 1px solid #cbd5e1; border-radius: 8px; cursor: pointer; background: white;" title="Nuevo código">↻</button>
+        <input type="text" id="captcha-input-txt" placeholder="Código" style="flex-grow: 1; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; text-transform: uppercase; font-weight: bold; font-size: 14px;">
+      </div>
+
+      <button onclick="validateCaptchaAndAdvance()" class="btn-main">Validar y Continuar a Búsqueda</button>
+      <div id="captcha-fail-msg" style="display: none; color: #e11d48; font-size: 12px; margin-top: 8px; text-align: center; font-weight: 600;">Código erróneo. Intente nuevamente.</div>
+    </div>
+  </div>
+
   <!-- MODAL VISOR DE RESOLUCIONES / ESCRITOS -->
   <div id="resolution-modal" class="modal-overlay">
     <div class="modal-card">
@@ -670,7 +692,7 @@
     </div>
   </div>
 
-  <!-- MODAL DE TIEMPO EXPIRADO (7 MINUTOS) -->
+  <!-- MODAL DE SESIÓN EXPIRADA (7 MINUTOS) -->
   <div id="session-timeout-modal" class="modal-overlay">
     <div class="modal-card" style="max-width: 360px; text-align: center; padding: 24px;">
       <h3 style="color: #831034; font-size: 18px; margin-bottom: 8px;">Sesión Finalizada</h3>
@@ -684,7 +706,7 @@
     Facultad de Derecho | Gobierno Digital e Informático - Docente: Dr. Michael Espinoza Coila | Estudiante: Sonia Pilar Condori Ruelas
   </footer>
 
-  <!-- SCRIPT LOGIC JAVASCRIPT ROBUSTO -->
+  <!-- SCRIPT LOGIC JAVASCRIPT -->
   <script>
     // BASE DE DATOS DEL EXPEDIENTE
     var DATA_ACTUADOS = [
@@ -718,38 +740,48 @@
       { id: "1-U", t: "Sentencia Exp. 0130-2014", d: "Criterio judicial análogo estimatorio de la Sala Civil." }
     ];
 
-    // CONTROL DE PANTALLAS
-    function switchScreenView(id) {
-      var views = document.querySelectorAll('.screen-view');
-      for (var i = 0; i < views.length; i++) {
-        views[i].classList.remove('active');
+    // CONTROL CENTRALIZADO DE PANTALLAS (0, 1, 2, 3, 4, 5)
+    function goToScreen(screenNumber) {
+      var allViews = document.querySelectorAll('.screen-view');
+      for (var i = 0; i < allViews.length; i++) {
+        allViews[i].classList.remove('active');
       }
-      var target = document.getElementById(id);
-      if (target) target.classList.add('active');
+      var target = document.getElementById('screen-' + screenNumber);
+      if (target) {
+        target.classList.add('active');
+      }
       window.scrollTo(0, 0);
+
+      // Efectos automáticos para pantallas de carga
+      if (screenNumber === 1) {
+        startSessionTimer();
+        runProgressBar('p1-loader', 2);
+      } else if (screenNumber === 4) {
+        runProgressBar('p4-loader', 5);
+      } else if (screenNumber === 5) {
+        renderScreen5Content();
+      }
     }
 
-    // FLUJO PANTALLA 0 -> 1 -> 2
-    function goToScreen1() {
-      switchScreenView('screen-1');
-      startSessionTimer();
+    function runProgressBar(barId, nextScreen) {
       var pct = 0;
-      var loader = document.getElementById('p1-loader');
-      loader.style.width = '0%';
+      var el = document.getElementById(barId);
+      el.style.width = '0%';
       var iv = setInterval(function() {
         pct += 20;
-        loader.style.width = pct + '%';
+        el.style.width = pct + '%';
         if (pct >= 100) {
           clearInterval(iv);
-          setTimeout(function() { switchScreenView('screen-2'); }, 150);
+          setTimeout(function() {
+            goToScreen(nextScreen);
+          }, 150);
         }
       }, 50);
     }
 
-    // FLUJO PANTALLA 2 (PORTAL Y CAPTCHA)
+    // PANTALLA 2: MENÚ DE INFORMACIÓN Y CAPTCHA
     function showInfoMenu(topic) {
       document.getElementById('temis-blank-area').style.display = 'none';
-      document.getElementById('search-modal-box').style.display = 'none';
       var panel = document.getElementById('info-display-panel');
       panel.style.display = 'block';
 
@@ -760,7 +792,7 @@
         closeInfoMenu();
       } else if (topic === 'mision') {
         h.innerText = "Misión del Poder Judicial";
-        p.innerText = "Administrar Justicia a través de sus órganos jurisdiccionales, garantizando la seguridad jurídica, la tutela jurisdiccional efectiva y el debido proceso en todo el territorio del Perú.";
+        p.innerText = "Administrar Justicia a través de sus órganos jurisdiccionales, garantizando la seguridad jurídica, la tutela jurisdiccional efectiva y el debido proceso.";
       } else if (topic === 'vision') {
         h.innerText = "Visión Institucional";
         p.innerText = "Ser un Poder del Estado moderno, transparente y eficiente, reconocido por brindar una justicia célere, confiable e inclusiva.";
@@ -775,22 +807,19 @@
 
     function closeInfoMenu() {
       document.getElementById('info-display-panel').style.display = 'none';
-      document.getElementById('search-modal-box').style.display = 'none';
       document.getElementById('temis-blank-area').style.display = 'block';
     }
 
-    function openCaptchaSearch() {
-      document.getElementById('temis-blank-area').style.display = 'none';
-      document.getElementById('info-display-panel').style.display = 'none';
-      document.getElementById('search-modal-box').style.display = 'block';
+    // MODAL DE CAPTCHA
+    function openCaptchaModal() {
+      document.getElementById('captcha-modal-overlay').style.display = 'flex';
       refreshCaptcha();
     }
 
-    function closeCaptchaSearch() {
-      closeInfoMenu();
+    function closeCaptchaModal() {
+      document.getElementById('captcha-modal-overlay').style.display = 'none';
     }
 
-    // CAPTCHA
     var currentCaptchaValue = "";
     function refreshCaptcha() {
       var chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
@@ -804,17 +833,18 @@
       document.getElementById('captcha-fail-msg').style.display = 'none';
     }
 
-    function validateCaptchaCode() {
+    function validateCaptchaAndAdvance() {
       var userText = document.getElementById('captcha-input-txt').value.trim().toUpperCase();
       if (userText === currentCaptchaValue) {
-        document.getElementById('captcha-step-box').style.display = 'none';
-        document.getElementById('search-inputs-box').style.display = 'block';
+        closeCaptchaModal();
+        goToScreen(3); // Pasa de la pantalla 2 a la pantalla 3
       } else {
         document.getElementById('captcha-fail-msg').style.display = 'block';
         refreshCaptcha();
       }
     }
 
+    // PANTALLA 3: SELECTOR DE MODO DE BÚSQUEDA
     function toggleSearchMode(mode) {
       var btnC = document.getElementById('tab-code-btn');
       var btnP = document.getElementById('tab-party-btn');
@@ -838,31 +868,7 @@
       }
     }
 
-    // FLUJO PANTALLA 2 -> 4 -> 5
-    function goToScreen4() {
-      switchScreenView('screen-4');
-      var pct = 0;
-      var loader = document.getElementById('p4-loader');
-      loader.style.width = '0%';
-      var iv = setInterval(function() {
-        pct += 20;
-        loader.style.width = pct + '%';
-        if (pct >= 100) {
-          clearInterval(iv);
-          setTimeout(function() {
-            renderScreen5Content();
-            switchScreenView('screen-5');
-          }, 150);
-        }
-      }, 50);
-    }
-
-    function returnToPortal() {
-      switchScreenView('screen-2');
-      openCaptchaSearch();
-    }
-
-    // RENDERIZAR PANTALLA 5 (LÍNEA DE TIEMPO Y EXPEDIENTE)
+    // RENDERIZAR PANTALLA 5 (LÍNEA DE TIEMPO Y ACTUADOS)
     function renderScreen5Content() {
       // 1. Línea de Tiempo Interactiva
       var timelineBox = document.getElementById('timeline-flow-list');
@@ -993,10 +999,8 @@
 
     function forceRestartToScreen0() {
       document.getElementById('session-timeout-modal').style.display = 'none';
-      document.getElementById('captcha-step-box').style.display = 'block';
-      document.getElementById('search-inputs-box').style.display = 'none';
-      closeInfoMenu();
-      switchScreenView('screen-0');
+      closeCaptchaModal();
+      goToScreen(0);
     }
   </script>
 </body>
