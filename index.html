@@ -6,7 +6,7 @@
   <title>CEJ - Expediente Judicial Electrónico | Gobierno Digital e Informático</title>
   
   <style>
-    /* PALETA CROMÁTICA MAGENTA INSTITUCIONAL */
+    /* VARIABLES DE COLOR - PALETA MAGENTA INSTITUCIONAL */
     :root {
       --mag-darkest: #240315;
       --mag-dark: #4a0418;
@@ -36,18 +36,18 @@
       justify-content: space-between;
     }
 
-    /* CONTROL DE LAS 6 PANTALLAS (0 A 5) */
-    .screen-view {
+    /* REGLA MAESTRA DE PANTALLAS MUTUAMENTE EXCLUYENTES */
+    .screen-stage {
       display: none !important;
       width: 100%;
       flex-grow: 1;
     }
-    .screen-view.active {
+    .screen-stage.active {
       display: flex !important;
       flex-direction: column;
     }
 
-    /* AVISO ACADÉMICO PERMANENTE */
+    /* BANNER SUPERIOR ACADÉMICO PERMANENTE */
     .academic-topbar {
       background: linear-gradient(90deg, #3d0213, #831034, #3d0213);
       color: #fce7f3;
@@ -109,7 +109,7 @@
       transform: translateY(-1px);
     }
 
-    /* BARRA ESTATAL PANTALLA 2 */
+    /* PANTALLA 2: BARRA ESTATAL */
     .gov-top-bar {
       background-color: var(--mag-dark);
       color: #ffffff;
@@ -316,17 +316,17 @@
 </head>
 <body>
 
-  <!-- BANNER SUPERIOR INFORMATIVO -->
+  <!-- BANNER SUPERIOR ACADÉMICO -->
   <div class="academic-topbar">
     PRODUCTO ACADÉMICO UNIVERSITARIO - FACULTAD DE DERECHO | SIMULADOR NO OFICIAL
   </div>
 
   <div style="flex-grow: 1; display: flex; flex-direction: column;">
 
-    <!-- ========================================== -->
-    <!-- PANTALLA 0: BIENVENIDA                     -->
-    <!-- ========================================== -->
-    <div id="screen-0" class="screen-view active center-content">
+    <!-- ============================================================ -->
+    <!-- PANTALLA 0: BIENVENIDA (ESTÁTICA, AL CLIC DESAPARECE Y VA A 1) -->
+    <!-- ============================================================ -->
+    <div id="pantalla-0" class="screen-stage active center-content">
       <div class="card-academic">
         <div class="academic-header-box">
           
@@ -352,7 +352,7 @@
 
         <div style="padding: 24px; text-align: left;">
           
-          <!-- FICHA DE PRESENTACIÓN ACADÉMICA -->
+          <!-- DATOS ACADÉMICOS -->
           <div style="background: #fdf2f8; border: 1px solid var(--mag-border); border-radius: 12px; padding: 14px; margin-bottom: 16px;">
             <div style="font-size: 13px; margin-bottom: 6px;">
               <span style="color: var(--text-muted);">Estudiante:</span>
@@ -375,19 +375,19 @@
             </p>
           </div>
 
-          <!-- BOTÓN PASAR A PANTALLA 1 -->
-          <button onclick="goToScreen(1)" class="btn-main">
-            <span>Ingresar a la Plataforma</span>
+          <!-- BOTÓN DE INGRESO -->
+          <button onclick="switchScreen(1)" class="btn-main">
+            <span>Ingresar al Sistema</span>
             <svg style="width: 16px; height: 16px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
           </button>
         </div>
       </div>
     </div>
 
-    <!-- ========================================== -->
-    <!-- PANTALLA 1: CARGA DE PANTALLA (SIN BARRA)  -->
-    <!-- ========================================== -->
-    <div id="screen-1" class="screen-view center-content">
+    <!-- ============================================================ -->
+    <!-- PANTALLA 1: CARGA DE PANTALLA (SIN BARRA, AUTOMÁTICA A LA 2) -->
+    <!-- ============================================================ -->
+    <div id="pantalla-1" class="screen-stage center-content">
       <div style="max-width: 360px; width: 100%; text-align: center;">
         <svg style="width: 48px; height: 48px; color: #831034; margin-bottom: 12px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
@@ -395,15 +395,15 @@
         <h3 style="font-size: 16px; font-weight: 700; color: #4a0418;">Iniciando Portal Institucional</h3>
         <p style="font-size: 12px; color: #64748b; margin-top: 4px;">Cargando módulos de Gobierno Digital...</p>
         <div class="progress-bar-wrap">
-          <div id="p1-loader" class="progress-bar-inner"></div>
+          <div id="p1-loader-fill" class="progress-bar-inner"></div>
         </div>
       </div>
     </div>
 
-    <!-- ========================================== -->
-    <!-- PANTALLA 2: PRINCIPAL CON BARRA HORIZONTAL -->
-    <!-- ========================================== -->
-    <div id="screen-2" class="screen-view">
+    <!-- ============================================================ -->
+    <!-- PANTALLA 2: PÁGINA PRINCIPAL (BARRA, TEMIS, CAPTCHA, FORM)   -->
+    <!-- ============================================================ -->
+    <div id="pantalla-2" class="screen-stage">
       <!-- Barra Superior -->
       <div class="gov-top-bar">
         <div style="display: flex; align-items: center; gap: 8px;">
@@ -430,14 +430,14 @@
         <button onclick="showInfoMenu('vision')" class="nav-item-btn">Visión</button>
         <button onclick="showInfoMenu('transparencia')" class="nav-item-btn">Transparencia</button>
         <button onclick="showInfoMenu('contactanos')" class="nav-item-btn">Contáctanos</button>
-        <button onclick="openCaptchaModal()" class="nav-item-btn nav-item-search">🔍 Búsqueda de Expediente</button>
+        <button onclick="triggerCaptchaWorkflow()" class="nav-item-btn nav-item-search">🔍 Búsqueda de Expediente</button>
       </div>
 
       <!-- Área Central de Pantalla 2 -->
       <div class="layout-wrapper" style="flex-grow: 1; display: flex; flex-direction: column; justify-content: center;">
         
         <!-- PARTE VACÍA CON TEMIS: AL HACER CLIC LLEVA AL CAPTCHA -->
-        <div id="temis-blank-area" onclick="openCaptchaModal()" class="panel-card" style="text-align: center; padding: 40px 16px; cursor: pointer;">
+        <div id="temis-blank-box" onclick="triggerCaptchaWorkflow()" class="panel-card" style="text-align: center; padding: 40px 16px; cursor: pointer;">
           <svg style="width: 140px; height: 140px; margin: 0 auto 14px; display: block;" viewBox="0 0 200 200" fill="none">
             <circle cx="100" cy="100" r="90" fill="#fdf2f8" stroke="#be185d" stroke-width="3" stroke-dasharray="4 2"/>
             <path d="M100 25 L100 160" stroke="#831034" stroke-width="4" stroke-linecap="round"/>
@@ -452,14 +452,66 @@
           </svg>
           <h2 style="font-size: 19px; color: #4a0418; font-weight: 800;">Consulta de Expedientes Judiciales (CEJ)</h2>
           <p style="font-size: 13px; color: #64748b; max-width: 480px; margin: 8px auto 14px;">
-            Haga clic en cualquier parte de este recuadro o en el botón superior para ingresar el <strong>CAPTCHA de seguridad</strong>.
+            Haga clic en cualquier parte de este espacio o en el botón superior para ingresar el <strong>CAPTCHA de seguridad</strong>.
           </p>
           <span style="font-size: 11px; background: #be185d; color: white; padding: 6px 14px; border-radius: 20px; font-weight: bold; display: inline-block;">
-            Clic aquí para abrir CAPTCHA
+            Clic aquí para desbloquear búsqueda
           </span>
         </div>
 
-        <!-- Info Institucional -->
+        <!-- Módulo de Búsqueda Desplegado tras CAPTCHA -->
+        <div id="search-inline-panel" class="panel-card" style="display: none; max-width: 650px; margin: 0 auto; width: 100%;">
+          <div style="background: #4a0418; color: white; padding: 12px 16px; border-radius: 12px 12px 0 0; margin: -18px -18px 16px; display: flex; justify-content: space-between; align-items: center;">
+            <strong style="font-size: 13px;">Búsqueda Jurisdiccional de Causas</strong>
+            <button onclick="cancelSearchWorkflow()" style="background: none; border: none; color: #fbcfe8; cursor: pointer; font-size: 16px;">✕</button>
+          </div>
+
+          <!-- Pestañas Número / Partes -->
+          <div style="display: flex; gap: 8px; margin-bottom: 14px; border-bottom: 1px solid #fce7f3; padding-bottom: 8px;">
+            <button id="tab-code-btn" onclick="toggleSearchMode('code')" style="background: #831034; color: white; border: none; padding: 7px 14px; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer;">Por Número de Expediente</button>
+            <button id="tab-party-btn" onclick="toggleSearchMode('party')" style="background: #e2e8f0; color: #334155; border: none; padding: 7px 14px; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer;">Por Partes Procesales</button>
+          </div>
+
+          <!-- Búsqueda por Número -->
+          <div id="tab-code-content">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 8px; margin-bottom: 12px;">
+              <div>
+                <label style="font-size: 11px; font-weight: bold; color: #64748b;">Correlativo</label>
+                <input type="text" value="00174" style="width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; text-align: center; font-weight: bold;">
+              </div>
+              <div>
+                <label style="font-size: 11px; font-weight: bold; color: #64748b;">Año</label>
+                <input type="text" value="2019" style="width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; text-align: center; font-weight: bold;">
+              </div>
+              <div>
+                <label style="font-size: 11px; font-weight: bold; color: #64748b;">Cuaderno</label>
+                <input type="text" value="0" style="width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; text-align: center; font-weight: bold;">
+              </div>
+              <div>
+                <label style="font-size: 11px; font-weight: bold; color: #64748b;">Distrito</label>
+                <input type="text" value="2111" style="width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; text-align: center; font-weight: bold;">
+              </div>
+            </div>
+          </div>
+
+          <!-- Búsqueda por Partes -->
+          <div id="tab-party-content" style="display: none; margin-bottom: 12px;">
+            <label style="font-size: 11px; font-weight: bold; color: #64748b;">Demandante o Demandado:</label>
+            <input type="text" value="Andrés Leonidas Supo Quispe" style="width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; margin-top: 4px; font-weight: bold;">
+          </div>
+
+          <div style="background: #fdf2f8; border: 1px solid #fbcfe8; padding: 10px; border-radius: 8px; font-size: 12px; margin-bottom: 16px;">
+            Expediente asignado: <strong style="color: #831034;">00174-2019-0-2111-JR-LA-02</strong> (EsSalud vs Supo)
+          </div>
+
+          <!-- AL HACER CLIC: DESAPARECE LA 2 Y PASA A LA 4 -->
+          <button onclick="switchScreen(4)" class="btn-main">
+            <span>Consultar Expediente Judicial</span>
+            <svg style="width: 16px; height: 16px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </button>
+        </div>
+
+        <!-- Módulo de Información -->
         <div id="info-display-panel" class="panel-card" style="display: none;">
           <h3 id="info-header" style="color: var(--mag-primary); margin-bottom: 8px; font-size: 16px;"></h3>
           <p id="info-paragraph" style="font-size: 13px; color: #475569; line-height: 1.6;"></p>
@@ -469,70 +521,10 @@
       </div>
     </div>
 
-    <!-- ========================================== -->
-    <!-- PANTALLA 3: FORMULARIO DE BÚSQUEDA         -->
-    <!-- ========================================== -->
-    <div id="screen-3" class="screen-view center-content">
-      <div class="panel-card" style="max-width: 650px; width: 100%; margin: auto;">
-        <div style="background: #4a0418; color: white; padding: 14px 18px; border-radius: 12px 12px 0 0; margin: -18px -18px 16px; display: flex; justify-content: space-between; align-items: center;">
-          <strong style="font-size: 14px;">Búsqueda Jurisdiccional de Causas</strong>
-          <span style="font-size: 11px; color: #fbcfe8; background: rgba(255,255,255,0.15); padding: 2px 8px; border-radius: 4px;">Paso 3 de 5</span>
-        </div>
-
-        <p style="font-size: 12px; color: #64748b; margin-bottom: 14px;">
-          Filtro habilitado tras validación del CAPTCHA. Seleccione la modalidad de consulta:
-        </p>
-
-        <!-- Pestañas Número / Partes -->
-        <div style="display: flex; gap: 8px; margin-bottom: 14px; border-bottom: 1px solid #fce7f3; padding-bottom: 8px;">
-          <button id="tab-code-btn" onclick="toggleSearchMode('code')" style="background: #831034; color: white; border: none; padding: 8px 14px; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer;">Por Número de Expediente</button>
-          <button id="tab-party-btn" onclick="toggleSearchMode('party')" style="background: #e2e8f0; color: #334155; border: none; padding: 8px 14px; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer;">Por Partes Procesales</button>
-        </div>
-
-        <!-- Búsqueda por Número -->
-        <div id="tab-code-content">
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 8px; margin-bottom: 12px;">
-            <div>
-              <label style="font-size: 11px; font-weight: bold; color: #64748b;">Correlativo</label>
-              <input type="text" value="00174" style="width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; text-align: center; font-weight: bold;">
-            </div>
-            <div>
-              <label style="font-size: 11px; font-weight: bold; color: #64748b;">Año</label>
-              <input type="text" value="2019" style="width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; text-align: center; font-weight: bold;">
-            </div>
-            <div>
-              <label style="font-size: 11px; font-weight: bold; color: #64748b;">Cuaderno</label>
-              <input type="text" value="0" style="width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; text-align: center; font-weight: bold;">
-            </div>
-            <div>
-              <label style="font-size: 11px; font-weight: bold; color: #64748b;">Distrito</label>
-              <input type="text" value="2111" style="width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; text-align: center; font-weight: bold;">
-            </div>
-          </div>
-        </div>
-
-        <!-- Búsqueda por Partes -->
-        <div id="tab-party-content" style="display: none; margin-bottom: 12px;">
-          <label style="font-size: 11px; font-weight: bold; color: #64748b;">Demandante o Demandado:</label>
-          <input type="text" value="Andrés Leonidas Supo Quispe" style="width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; margin-top: 4px; font-weight: bold;">
-        </div>
-
-        <div style="background: #fdf2f8; border: 1px solid #fbcfe8; padding: 10px; border-radius: 8px; font-size: 12px; margin-bottom: 16px;">
-          Expediente asignado: <strong style="color: #831034;">00174-2019-0-2111-JR-LA-02</strong> (EsSalud vs Supo)
-        </div>
-
-        <!-- BOTÓN QUE PASA A PANTALLA 4 -->
-        <button onclick="goToScreen(4)" class="btn-main">
-          <span>Consultar Expediente Judicial</span>
-          <svg style="width: 16px; height: 16px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-        </button>
-      </div>
-    </div>
-
-    <!-- ========================================== -->
-    <!-- PANTALLA 4: CARGA DE PANTALLA (SIN BARRA)  -->
-    <!-- ========================================== -->
-    <div id="screen-4" class="screen-view center-content">
+    <!-- ============================================================ -->
+    <!-- PANTALLA 4: CARGA DE PANTALLA (SIN BARRA, AUTOMÁTICA A LA 5) -->
+    <!-- ============================================================ -->
+    <div id="pantalla-4" class="screen-stage center-content">
       <div style="max-width: 360px; width: 100%; text-align: center;">
         <svg style="width: 48px; height: 48px; color: #be185d; margin-bottom: 12px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10"/><path d="M6 10h10"/>
@@ -540,15 +532,15 @@
         <h3 style="font-size: 16px; font-weight: 700; color: #4a0418;">Indexando Cuaderno Laboral Digital</h3>
         <p style="font-size: 12px; color: #64748b; margin-top: 4px;">Recuperando resoluciones, foliatura y línea de tiempo...</p>
         <div class="progress-bar-wrap">
-          <div id="p4-loader" class="progress-bar-inner"></div>
+          <div id="p4-loader-fill" class="progress-bar-inner"></div>
         </div>
       </div>
     </div>
 
-    <!-- ========================================== -->
-    <!-- PANTALLA 5: EXPEDIENTE Y LÍNEA DE TIEMPO   -->
-    <!-- ========================================== -->
-    <div id="screen-5" class="screen-view">
+    <!-- ============================================================ -->
+    <!-- PANTALLA 5: EXPEDIENTE COMPLETO Y LÍNEA DE TIEMPO            -->
+    <!-- ============================================================ -->
+    <div id="pantalla-5" class="screen-stage">
       <!-- Encabezado del Expediente -->
       <div style="background: #4a0418; color: white; padding: 12px 16px; border-bottom: 2px solid #be185d;">
         <div class="layout-wrapper" style="padding: 0; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
@@ -556,7 +548,7 @@
             <div style="font-size: 10px; color: #fbcfe8; font-weight: 700;">MÓDULO DEL EXPEDIENTE JUDICIAL ELECTRÓNICO (EJE)</div>
             <div style="font-size: 16px; font-weight: 800; font-family: monospace;">EXP. 00174-2019-0-2111-JR-LA-02</div>
           </div>
-          <button onclick="goToScreen(2)" style="background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;">
+          <button onclick="switchScreen(2)" style="background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;">
             ← Volver a la Búsqueda
           </button>
         </div>
@@ -659,7 +651,7 @@
       </div>
 
       <div style="background: #fdf2f8; border: 1px solid #fbcfe8; padding: 10px; border-radius: 8px; font-size: 12px; color: #831034; margin-bottom: 14px;">
-        Ingrese el código alfanumérico para desbloquear el formulario de consulta (Pantalla 3).
+        Ingrese el código alfanumérico para desbloquear el formulario de búsqueda de expedientes:
       </div>
 
       <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 14px;">
@@ -670,7 +662,7 @@
         <input type="text" id="captcha-input-txt" placeholder="Código" style="flex-grow: 1; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; text-transform: uppercase; font-weight: bold; font-size: 14px;">
       </div>
 
-      <button onclick="validateCaptchaAndAdvance()" class="btn-main">Validar y Continuar a Búsqueda</button>
+      <button onclick="validateCaptchaAndUnlock()" class="btn-main">Validar y Acceder a Búsqueda</button>
       <div id="captcha-fail-msg" style="display: none; color: #e11d48; font-size: 12px; margin-top: 8px; text-align: center; font-weight: 600;">Código erróneo. Intente nuevamente.</div>
     </div>
   </div>
@@ -740,30 +732,31 @@
       { id: "1-U", t: "Sentencia Exp. 0130-2014", d: "Criterio judicial análogo estimatorio de la Sala Civil." }
     ];
 
-    // CONTROL CENTRALIZADO DE PANTALLAS (0, 1, 2, 3, 4, 5)
-    function goToScreen(screenNumber) {
-      var allViews = document.querySelectorAll('.screen-view');
-      for (var i = 0; i < allViews.length; i++) {
-        allViews[i].classList.remove('active');
+    // CONTROL DE VISIBILIDAD MUTUAMENTE EXCLUYENTE
+    function switchScreen(screenNum) {
+      var allStages = document.querySelectorAll('.screen-stage');
+      for (var i = 0; i < allStages.length; i++) {
+        allStages[i].classList.remove('active');
       }
-      var target = document.getElementById('screen-' + screenNumber);
+
+      var target = document.getElementById('pantalla-' + screenNum);
       if (target) {
         target.classList.add('active');
       }
       window.scrollTo(0, 0);
 
-      // Efectos automáticos para pantallas de carga
-      if (screenNumber === 1) {
+      // Efectos automáticos
+      if (screenNum === 1) {
         startSessionTimer();
-        runProgressBar('p1-loader', 2);
-      } else if (screenNumber === 4) {
-        runProgressBar('p4-loader', 5);
-      } else if (screenNumber === 5) {
+        runProgressBar('p1-loader-fill', 2);
+      } else if (screenNum === 4) {
+        runProgressBar('p4-loader-fill', 5);
+      } else if (screenNum === 5) {
         renderScreen5Content();
       }
     }
 
-    function runProgressBar(barId, nextScreen) {
+    function runProgressBar(barId, nextScreenNum) {
       var pct = 0;
       var el = document.getElementById(barId);
       el.style.width = '0%';
@@ -773,15 +766,79 @@
         if (pct >= 100) {
           clearInterval(iv);
           setTimeout(function() {
-            goToScreen(nextScreen);
+            switchScreen(nextScreenNum);
           }, 150);
         }
       }, 50);
     }
 
-    // PANTALLA 2: MENÚ DE INFORMACIÓN Y CAPTCHA
+    // PANTALLA 2: WORKFLOW DE CAPTCHA Y FORMULARIO
+    function triggerCaptchaWorkflow() {
+      document.getElementById('captcha-modal-overlay').style.display = 'flex';
+      refreshCaptcha();
+    }
+
+    function closeCaptchaModal() {
+      document.getElementById('captcha-modal-overlay').style.display = 'none';
+    }
+
+    function cancelSearchWorkflow() {
+      document.getElementById('search-inline-panel').style.display = 'none';
+      document.getElementById('temis-blank-box').style.display = 'block';
+    }
+
+    var currentCaptchaValue = "";
+    function refreshCaptcha() {
+      var chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+      var code = "";
+      for (var i = 0; i < 5; i++) {
+        code += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      currentCaptchaValue = code;
+      document.getElementById('captcha-render').innerText = code;
+      document.getElementById('captcha-input-txt').value = "";
+      document.getElementById('captcha-fail-msg').style.display = 'none';
+    }
+
+    function validateCaptchaAndUnlock() {
+      var userText = document.getElementById('captcha-input-txt').value.trim().toUpperCase();
+      if (userText === currentCaptchaValue) {
+        closeCaptchaModal();
+        // Oculta Temis y abre el formulario dentro de la Pantalla 2
+        document.getElementById('temis-blank-box').style.display = 'none';
+        document.getElementById('search-inline-panel').style.display = 'block';
+      } else {
+        document.getElementById('captcha-fail-msg').style.display = 'block';
+        refreshCaptcha();
+      }
+    }
+
+    function toggleSearchMode(mode) {
+      var btnC = document.getElementById('tab-code-btn');
+      var btnP = document.getElementById('tab-party-btn');
+      var tabC = document.getElementById('tab-code-content');
+      var tabP = document.getElementById('tab-party-content');
+
+      if (mode === 'code') {
+        btnC.style.background = '#831034';
+        btnC.style.color = 'white';
+        btnP.style.background = '#e2e8f0';
+        btnP.style.color = '#334155';
+        tabC.style.display = 'block';
+        tabP.style.display = 'none';
+      } else {
+        btnP.style.background = '#831034';
+        btnP.style.color = 'white';
+        btnC.style.background = '#e2e8f0';
+        btnC.style.color = '#334155';
+        tabP.style.display = 'block';
+        tabC.style.display = 'none';
+      }
+    }
+
     function showInfoMenu(topic) {
-      document.getElementById('temis-blank-area').style.display = 'none';
+      document.getElementById('temis-blank-box').style.display = 'none';
+      document.getElementById('search-inline-panel').style.display = 'none';
       var panel = document.getElementById('info-display-panel');
       panel.style.display = 'block';
 
@@ -807,68 +864,10 @@
 
     function closeInfoMenu() {
       document.getElementById('info-display-panel').style.display = 'none';
-      document.getElementById('temis-blank-area').style.display = 'block';
+      document.getElementById('temis-blank-box').style.display = 'block';
     }
 
-    // MODAL DE CAPTCHA
-    function openCaptchaModal() {
-      document.getElementById('captcha-modal-overlay').style.display = 'flex';
-      refreshCaptcha();
-    }
-
-    function closeCaptchaModal() {
-      document.getElementById('captcha-modal-overlay').style.display = 'none';
-    }
-
-    var currentCaptchaValue = "";
-    function refreshCaptcha() {
-      var chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-      var code = "";
-      for (var i = 0; i < 5; i++) {
-        code += chars.charAt(Math.floor(Math.random() * chars.length));
-      }
-      currentCaptchaValue = code;
-      document.getElementById('captcha-render').innerText = code;
-      document.getElementById('captcha-input-txt').value = "";
-      document.getElementById('captcha-fail-msg').style.display = 'none';
-    }
-
-    function validateCaptchaAndAdvance() {
-      var userText = document.getElementById('captcha-input-txt').value.trim().toUpperCase();
-      if (userText === currentCaptchaValue) {
-        closeCaptchaModal();
-        goToScreen(3); // Pasa de la pantalla 2 a la pantalla 3
-      } else {
-        document.getElementById('captcha-fail-msg').style.display = 'block';
-        refreshCaptcha();
-      }
-    }
-
-    // PANTALLA 3: SELECTOR DE MODO DE BÚSQUEDA
-    function toggleSearchMode(mode) {
-      var btnC = document.getElementById('tab-code-btn');
-      var btnP = document.getElementById('tab-party-btn');
-      var tabC = document.getElementById('tab-code-content');
-      var tabP = document.getElementById('tab-party-content');
-
-      if (mode === 'code') {
-        btnC.style.background = '#831034';
-        btnC.style.color = 'white';
-        btnP.style.background = '#e2e8f0';
-        btnP.style.color = '#334155';
-        tabC.style.display = 'block';
-        tabP.style.display = 'none';
-      } else {
-        btnP.style.background = '#831034';
-        btnP.style.color = 'white';
-        btnC.style.background = '#e2e8f0';
-        btnC.style.color = '#334155';
-        tabP.style.display = 'block';
-        tabC.style.display = 'none';
-      }
-    }
-
-    // RENDERIZAR PANTALLA 5 (LÍNEA DE TIEMPO Y ACTUADOS)
+    // PANTALLA 5: RENDERIZADO DE LÍNEA DE TIEMPO Y EXPEDIENTE
     function renderScreen5Content() {
       // 1. Línea de Tiempo Interactiva
       var timelineBox = document.getElementById('timeline-flow-list');
@@ -939,7 +938,7 @@
       }
     }
 
-    // MODAL DE RESOLUCIONES
+    // MODAL VISOR DE RESOLUCIONES
     function openResolutionModal(num) {
       var act = null;
       for (var i = 0; i < DATA_ACTUADOS.length; i++) {
@@ -1000,7 +999,8 @@
     function forceRestartToScreen0() {
       document.getElementById('session-timeout-modal').style.display = 'none';
       closeCaptchaModal();
-      goToScreen(0);
+      cancelSearchWorkflow();
+      switchScreen(0);
     }
   </script>
 </body>
